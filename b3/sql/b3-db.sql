@@ -1,0 +1,5 @@
+CREATE DATABASE b3 CHARACTER SET utf8;
+
+GRANT ALL ON b3.*
+TO 'b3'@'localhost'
+IDENTIFIED BY 'password';
