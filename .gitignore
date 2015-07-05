@@ -5,6 +5,10 @@ __pycache__/
 # C extensions
 *.so
 
+#passfile
+Pwd.py
+Pwd.pyc
+
 # Distribution / packaging
 .Python
 env/
