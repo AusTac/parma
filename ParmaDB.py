@@ -31,7 +31,7 @@ def get_connection():
 
 
 def get_full_table(table_name="server_rule"):
-    m_conn = get_rules()
+    m_conn = get_connection()
     query = "SELECT * FROM " + table_name
     cursor = m_conn.cursor()
     cursor.execute(query)
@@ -42,13 +42,64 @@ def get_full_table(table_name="server_rule"):
     return result
 
 
-def get_rules():
-    return get_full_table("server_rules")
+def get_single_column(table_name="admins", column="guid"):
+    m_conn = get_connection()
+    query = "SELECT " + column + " FROM " + table_name
+    cursor = m_conn.cursor()
+    cursor.execute(query)
+    m_conn.commit()
+    result = cursor.fetchall()
+    cursor.close()
+    m_conn.close()
+    return result
 
 
 def get_admins():
-    return get_full_table("admins")
+    admins = get_single_column("admins", "guid")
+    guids = []
+    for guid in admins:
+        guids.append(guid[0])
+    return guids
 
 
-print get_rules()
+def get_player(guid):
+    m_conn = get_connection()
+    query = "SELECT name FROM players WHERE guid=%s"
+    cursor = m_conn.cursor()
+    cursor.execute(query, (guid,))
+    m_conn.commit()
+    result = cursor.fetchall()
+    cursor.close()
+    m_conn.close()
+    return result
 
+
+def set_players_offline():
+    m_conn = get_connection()
+    query = "UPDATE players SET is_online=False"
+    cursor = m_conn.cursor()
+    cursor.execute(query)
+    m_conn.commit()
+    cursor.close()
+    m_conn.close()
+
+
+def update_player(guid="", name="", ip="", online=True, lobby_idle=False, score=0, ping=0, timestamp=""):
+    pass
+
+
+def insert_player(guid="", name="", ip="", online=True, lobby_idle=False, score=0, ping=0, timestamp=""):
+    pass
+
+
+def update_players(players={}):
+    # For each player
+    for guid, player in players.iteritems():
+        pass
+        # Check if guid in db
+        if (len(get_player(guid))>0):
+            pass
+        else:
+            pass
+
+print len(get_player("test"))
