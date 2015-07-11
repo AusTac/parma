@@ -30,10 +30,9 @@ def get_connection():
                            db=Pwd.mysql_db())
 
 
-def get_rules():
-    m_conn = MySQLdb.connect(user=Pwd.mysql_user(), passwd=Pwd.mysql_password(), host='localhost', port=1234,
-                             db=Pwd.mysql_db())
-    query = "SELECT * FROM server_rule"
+def get_full_table(table_name="server_rule"):
+    m_conn = get_rules()
+    query = "SELECT * FROM " + table_name
     cursor = m_conn.cursor()
     cursor.execute(query)
     m_conn.commit()
@@ -42,4 +41,14 @@ def get_rules():
     m_conn.close()
     return result
 
+
+def get_rules():
+    return get_full_table("server_rules")
+
+
+def get_admins():
+    return get_full_table("admins")
+
+
+print get_rules()
 
