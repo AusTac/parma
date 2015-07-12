@@ -1,13 +1,17 @@
 from b3.parsers.battleye.protocol import BattleyeServer
 import ParmaDB
 import BEProcessing
+import ConfigParser
 
 if __name__ == '__main__':
     import Pwd
     from threading import Thread, Event
     import time
     import b3.lib.sourcelib.SourceQuery as sq
+    import ConfigParser
     import MySQLdb
+
+
     host = "austac.net.au"
     port = 2303
     pw = Pwd.password()
@@ -76,7 +80,7 @@ if __name__ == '__main__':
 
         def run(self):
             # Fetch authe'd GUIDs
-            admin_guids = ParmaDB.get_admins()
+            
 
             # Fetch ruleset
 

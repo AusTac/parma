@@ -1,0 +1,15 @@
+[Battleye]
+Host: austac.net.au
+Port: 2302
+Password: hunter22
+
+[SourceQuery]
+Host: austac.net.au
+Port: 2303
+
+[SQL]
+Host: localhost
+Port: 3306
+DataBase: parma
+User: parma
+Password: parma
