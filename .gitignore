@@ -8,6 +8,7 @@ __pycache__/
 #passfile
 Pwd.py
 Pwd.pyc
+*.cfg
 
 # Distribution / packaging
 .Python
