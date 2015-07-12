@@ -82,7 +82,7 @@ class ParmaDB:
         result[guid_two] = example_two
         return result
 
-    def update_players_table(self, players={{},}):
+    def update_players_table(self, players):
         """
         Update players database, inserting new players and updating existing
 

@@ -4,7 +4,6 @@ import BEProcessing
 import ConfigParser
 
 if __name__ == '__main__':
-    import Pwd
     from threading import Thread, Event
     import time
     import b3.lib.sourcelib.SourceQuery as sq
@@ -14,7 +13,7 @@ if __name__ == '__main__':
 
     host = "austac.net.au"
     port = 2303
-    pw = Pwd.password()
+    pw = "hunter22"
     _command_queue = []
     admin_guids = []
     players = {}
@@ -80,7 +79,7 @@ if __name__ == '__main__':
 
         def run(self):
             # Fetch authe'd GUIDs
-            
+
 
             # Fetch ruleset
 
