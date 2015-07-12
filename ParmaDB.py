@@ -97,6 +97,32 @@ class ParmaDB:
         """
         pass
 
+    def get_action(self):
+        """
+        Get a single pending action from the DB and mark it as in progress.
+        We will want an action at a time since we will hand off to the main process and get a result
+        (fail, succeed etc)
+        :return: Command
+        """
+        pass
+
+    def add_action(self, player_guid, automatic, action, action_value,action_status, timestamp, admin_guid, rule_id,
+                   player_name):
+        """
+        Add a pending action to the database
+        :param player_guid: String guid
+        :param automatic: boolean is action automatic
+        :param action:
+        :param action_value:
+        :param action_status:
+        :param timestamp:
+        :param admin_guid:
+        :param rule_id:
+        :param player_name:
+        :return:
+        """
+        pass
+
     # Proper code above
 
     # Draft code below, delete as you replace functionality or names conflict
