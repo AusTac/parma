@@ -1,6 +1,7 @@
-from b3.parsers.battleye.protocol import BattleyeServer
+from b3.parsers.battleye.protocol import BattleyeServer, CommandTimeoutError, NetworkError
 import ParmaDB
 import BEProcessing
+import socket
 import ConfigParser
 
 if __name__ == '__main__':
@@ -37,23 +38,28 @@ if __name__ == '__main__':
         _stop = Event()
         nb_instances = 0
 
-        def __init__(self, battleye_server, delay=20):
+        def __init__(self, battleye_server, source_server, delay=20):
             Thread.__init__(self)
             self.battleye_server = battleye_server
             self.delay = delay
+            self.source_server = source_server
 
 
         def update_scores(self):
-            server = sq.SourceQuery(host="austac.net.au", port=2303)
-            steam_players = server.player()
-            server.disconnect()
-            # TODO: Handle case when steam!bercon
-            # TODO: Handle above case for mistaken names
-            for s in steam_players:
-                for guid, player in players.iteritems():
-                    if s['name'] == player['name']:
-                        player['score'] = s['kills']
-                        player['connecttime'] = s['connecttime']
+            try:
+                steam_players = self.source_server.player()
+                # TODO: Handle case when steam!bercon
+                # TODO: Handle above case for mistaken names
+                for s in steam_players:
+                    for guid, player in players.iteritems():
+                        # Warning thrown:
+                        # UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode -
+                        # interpreting them as being unequal if s['name'] == player['name']:
+                        if s['name'] == player['name']:
+                            player['score'] = s['kills']
+                            player['connecttime'] = s['time']
+            except socket.timeout:
+                pass
 
         def update_players(self, be_players):
             for playernum, player in be_players.iteritems():
@@ -88,8 +94,17 @@ if __name__ == '__main__':
 
             while not self.__class__._stop.is_set():
                 # Fetch players, update in-app player dict
-                response = self.battleye_server.command('players')
-                self.update_players(BEProcessing.players_list(response))
+                # Can throw commandTimeoutError
+                try:
+                    response = self.battleye_server.command('players')
+                    self.update_players(BEProcessing.players_list(response))
+                except CommandTimeoutError:
+                    pass
+                except NetworkError:
+                    pass
+                    # Connection failure?
+
+
 
                 # Update scores
                 self.update_scores()
@@ -117,12 +132,11 @@ if __name__ == '__main__':
     t_conn = BattleyeServer(host, port, pw)
     try:
         t_conn.subscribe(battleyeEventListener)
-        Daemon(t_conn).start()
+        Daemon(t_conn, sq.SourceQuery(host="austac.net.au", port=2303)).start()
         while True:
             pass
     except KeyboardInterrupt:
         pass
-
     finally:
         # stop all threads
         t_conn.stop()
