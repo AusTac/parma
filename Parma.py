@@ -11,7 +11,7 @@ if __name__ == '__main__':
     import ConfigParser
     import MySQLdb
 
-
+    stop_all = Event()
     host = "austac.net.au"
     port = 2303
     pw = "hunter22"
@@ -34,16 +34,12 @@ if __name__ == '__main__':
 
     # Main daemon class
     class Daemon(Thread):
-        #
-        _stop = Event()
-        nb_instances = 0
 
-        def __init__(self, battleye_server, source_server, delay=20):
+        def __init__(self, battleye_server, source_server, delay=5):
             Thread.__init__(self)
             self.battleye_server = battleye_server
             self.delay = delay
             self.source_server = source_server
-
 
         def update_scores(self):
             try:
@@ -92,7 +88,7 @@ if __name__ == '__main__':
             # Fetch ruleset
 
 
-            while not self.__class__._stop.is_set():
+            while not stop_all.is_set():
                 # Fetch players, update in-app player dict
                 # Can throw commandTimeoutError
                 try:
@@ -101,7 +97,8 @@ if __name__ == '__main__':
                 except CommandTimeoutError:
                     pass
                 except NetworkError:
-                    pass
+                    t_conn.stop()
+                    stop_all.set()
                     # Connection failure?
 
 
@@ -124,20 +121,19 @@ if __name__ == '__main__':
                 time.sleep(self.delay)
                 # D
 
-        @classmethod
-        def stopAll(cls):
-            cls._stop.set()
-
     # connect to the BattlEye server
     t_conn = BattleyeServer(host, port, pw)
+    print t_conn.is_alive
     try:
-        t_conn.subscribe(battleyeEventListener)
-        Daemon(t_conn, sq.SourceQuery(host="austac.net.au", port=2303)).start()
-        while True:
-            pass
+        # if connection did not fail
+        if not t_conn.isStopped():
+            t_conn.subscribe(battleyeEventListener)
+            Daemon(t_conn, sq.SourceQuery(host="austac.net.au", port=2303)).start()
+            while not stop_all.is_set():
+                time.sleep(10)
     except KeyboardInterrupt:
         pass
     finally:
         # stop all threads
         t_conn.stop()
-        Daemon.stopAll()
+        stop_all.set()
