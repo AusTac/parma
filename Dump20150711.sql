@@ -107,6 +107,7 @@ CREATE TABLE `players` (
   `last_ip` varchar(45) DEFAULT NULL,
   `is_online` tinyint(4) DEFAULT NULL,
   `lobby_idle` tinyint(4) DEFAULT NULL,
+  `connection_time` int(11) DEFAULT NULL,
   `time_stamp` datetime DEFAULT NULL,
   `score` int(11) DEFAULT NULL,
   `ping` int(11) DEFAULT NULL,

@@ -66,6 +66,7 @@ class ParmaDB:
         example_one['playernum'] = 1
         example_one['score'] = -50
         example_one['lobby'] = False
+        example_one['connecttime'] = 1234
         example_one['name'] = "John Doe"
         example_one['ip'] = "127.0.0.1"
         guid_one = "12345678123456781234567812345678"
@@ -76,6 +77,7 @@ class ParmaDB:
         example_two['playernum'] = 3
         example_two['score'] = -40
         example_two['lobby'] = False
+        example_two['connecttime'] = 4321
         example_two['name'] = "Jane Doe"
         example_two['ip'] = "8.8.8.8"
         guid_two = "22345678123456781234567812345672"
@@ -176,11 +178,11 @@ class ParmaDB:
         return result
 
 
-    def update_player(self, guid="", name="", ip="", online=True, lobby_idle=False, score=0, ping=0, timestamp=""):
+    def update_player(self, guid="", name="", ip="", online=True, lobby_idle=False, connection_time = 0, score=0, ping=0, timestamp=""):
         pass
 
 
-    def insert_player(self, guid="", name="", ip="", online=True, lobby_idle=False, score=0, ping=0, timestamp=""):
+    def insert_player(self, guid="", name="", ip="", online=True, lobby_idle=False, connection_time = 0, score=0, ping=0, timestamp=""):
         pass
 
 

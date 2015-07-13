@@ -53,6 +53,7 @@ if __name__ == '__main__':
                 for guid, player in players.iteritems():
                     if s['name'] == player['name']:
                         player['score'] = s['kills']
+                        player['connecttime'] = s['connecttime']
 
         def update_players(self, be_players):
             for playernum, player in be_players.iteritems():
@@ -72,6 +73,7 @@ if __name__ == '__main__':
                         newdict['ping'] = player['ping']
                         newdict['playernum'] = player['cid']
                         newdict['score'] = 0
+                        newdict['connecttime'] = 0
                         newdict['lobby'] = player['lobby']
                         newdict['name'] = player['name']
                         newdict['ip'] = player['ip']
